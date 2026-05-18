@@ -1,6 +1,6 @@
 {
   "name": "@uwu-protocol/checkout",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "UwU Protocol — proof-of-payment checkout SDK for React. UPI payment via Setu AA → on-chain attestation on Algorand.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
