@@ -36,7 +36,7 @@
     "algosdk": "^3"
   },
   "keywords": ["uwu", "checkout", "proof-of-payment", "algorand", "upi", "setu", "account-aggregator", "fiat"],
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jaibhedia/uwu-algo-sdk.git"

@@ -1,21 +1,42 @@
-MIT License
+UwU Protocol Source Available License
+Copyright (c) UwU Protocol. All rights reserved.
 
-Copyright (c) 2026 Shantanu Swami
+1. GRANT OF LICENSE
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+   Subject to the terms and conditions of this License, the copyright holder
+   hereby grants you a limited, non-exclusive, non-transferable,
+   non-sublicensable, revocable license to use this software and associated
+   documentation files (the "Software") solely for your own internal,
+   non-commercial or commercial purposes (e.g., integrating the SDK into
+   your application).
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. RESTRICTIONS
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+   You may NOT:
+   (a) Modify, adapt, translate, or create derivative works of the Software;
+   (b) Redistribute, sublicense, sell, lease, or otherwise transfer the
+       Software or any copy thereof to any third party;
+   (c) Remove or alter any copyright notices, license text, or branding
+       contained in the Software;
+   (d) Use the Software to build a competing product or service.
+
+3. OWNERSHIP
+
+   The Software is and shall remain the exclusive property of the copyright
+   holder. Nothing in this License transfers any ownership rights.
+
+4. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+   OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+5. TERMINATION
+
+   This License is effective until terminated. It will terminate automatically
+   if you fail to comply with any term herein. Upon termination, you must
+   cease all use of the Software and destroy all copies in your possession.
