@@ -180,7 +180,169 @@ code { font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 .body-sm { font-size: 13px; line-height: 1.55; color: var(--fg-3); margin: 0; }
 .mono { font-family: var(--font-mono); }
 
-/* ── How it works ──────────────────────────────────────────────────────── */
+/* ── Single-page hero (two-column) ─────────────────────────────────────── */
+.hero-section {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: max(96px, 10vh);
+  padding-bottom: 56px;
+}
+.hero-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+}
+@media (max-width: 880px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+}
+.hero-left { display: flex; flex-direction: column; }
+.hero-right { display: flex; justify-content: stretch; }
+.hero-right > * { width: 100%; }
+
+.hero-floor {
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Offer card (compact, left column) ─────────────────────────────────── */
+.offer-card {
+  margin-top: 32px;
+  max-width: 480px;
+  background: var(--bg-2);
+  border: 1px solid var(--hair);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 4px 16px -10px rgba(28, 24, 20, 0.08);
+}
+.offer-row {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+}
+
+/* ── Flow diagram (right column) ───────────────────────────────────────── */
+.flow-card {
+  background: var(--bg-2);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 12px 40px -16px rgba(28, 24, 20, 0.14);
+  position: relative;
+  overflow: hidden;
+}
+.flow-card::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at top right, rgba(255, 179, 198, 0.18), transparent 60%);
+  pointer-events: none;
+}
+.flow-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px;
+  position: relative;
+}
+.flow-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  background: rgba(95, 184, 154, 0.10);
+  border: 1px solid rgba(95, 184, 154, 0.30);
+  color: var(--green);
+}
+.flow-status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(95, 184, 154, 0.25);
+  animation: flow-pulse 2.2s ease-in-out infinite;
+}
+@keyframes flow-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(95, 184, 154, 0.25); }
+  50%      { box-shadow: 0 0 0 6px rgba(95, 184, 154, 0.10); }
+}
+
+.flow-lanes {
+  list-style: none; padding: 0; margin: 0;
+  position: relative;
+}
+.flow-lane {
+  display: flex; gap: 14px;
+  padding: 10px 0;
+  position: relative;
+}
+.flow-lane:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 38px;
+  width: 2px;
+  height: calc(100% - 18px);
+  background: linear-gradient(to bottom, var(--hair-2), var(--hair));
+}
+.flow-node {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.flow-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.flow-body { flex: 1; min-width: 0; padding-top: 2px; }
+.flow-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+.flow-title {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  margin-bottom: 3px;
+}
+.flow-hint {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg-3);
+}
+.flow-foot {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--hair);
+  text-align: center;
+  position: relative;
+}
+
+/* ── Error strip ───────────────────────────────────────────────────────── */
+.error-strip {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  display: flex; flex-direction: column; gap: 4px;
+  max-width: 480px;
+}
+
+/* ── Legacy how-it-works (kept in case anything references it) ─────────── */
 .how-it-works { width: 100%; max-width: 760px; }
 .how-it-works ol {
   list-style: none; padding: 0; margin: 16px 0 0;

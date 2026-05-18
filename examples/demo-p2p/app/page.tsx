@@ -34,18 +34,17 @@ function truncate(s: string, head = 6, tail = 4): string {
 
 function CopyButton({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
-  const onClick = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1400);
-    } catch {}
-  };
   return (
     <button
       type="button"
       aria-label="Copy"
-      onClick={onClick}
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(value);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1400);
+        } catch {}
+      }}
       className={`copy-btn${copied ? " copied" : ""}`}
     >
       {copied ? (
@@ -59,6 +58,126 @@ function CopyButton({ value }: { value: string }) {
         </svg>
       )}
     </button>
+  );
+}
+
+function FlowDiagram() {
+  const steps = [
+    {
+      label: "UPI",
+      title: "Pay seller via UPI",
+      hint: "Money goes direct to bank. uWu never touches fiat.",
+      tone: "#c2530a",
+    },
+    {
+      label: "Setu AA",
+      title: "Verify the credit",
+      hint: "RBI-licensed consent → oracle matches by amount + UTR.",
+      tone: "#6d4ed9",
+    },
+    {
+      label: "Algorand",
+      title: "Anchor proof on-chain",
+      hint: "Ed25519 attestation → UwUPaymentRegistry app 762669103.",
+      tone: "#3a9d7a",
+    },
+  ];
+  return (
+    <div className="flow-card">
+      <div className="flow-head">
+        <div className="eyebrow">Trade flow</div>
+        <div className="flow-status">
+          <span className="flow-status-dot" />
+          <span className="mono" style={{ fontSize: 10.5 }}>READY</span>
+        </div>
+      </div>
+      <ol className="flow-lanes">
+        {steps.map((s, i) => (
+          <li key={i} className="flow-lane">
+            <span className="flow-node" style={{ background: s.tone, boxShadow: `0 0 0 4px ${s.tone}22` }}>
+              <span className="flow-num">{String(i + 1).padStart(2, "0")}</span>
+            </span>
+            <div className="flow-body">
+              <div className="flow-label" style={{ color: s.tone }}>{s.label}</div>
+              <div className="flow-title">{s.title}</div>
+              <div className="flow-hint">{s.hint}</div>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div className="flow-foot">
+        <span className="mono" style={{ fontSize: 10, color: "var(--fg-4)", letterSpacing: "0.1em" }}>
+          ⌬ algorand testnet · app 762669103
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ReceiptCard({ completed, oracleAddr }: { completed: NonNullable<CompletedAt>; oracleAddr: string }) {
+  const { result, at } = completed;
+  return (
+    <div className="flow-card" style={{ borderColor: "rgba(95,184,154,0.4)", background: "rgba(95,184,154,0.06)" }}>
+      <div className="flow-head">
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(95,184,154,0.18)", border: "1.5px solid rgba(95,184,154,0.5)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden>
+              <path d="M3 6.5l2.4 2.4L10 4.3" stroke="var(--green)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          <div style={{ fontSize: 14.5, fontWeight: 600, letterSpacing: "-0.01em" }}>Payment attested</div>
+        </div>
+      </div>
+      <div style={{ marginTop: 14 }}>
+        <div className="receipt-row">
+          <span className="label">Amount</span>
+          <span className="value">₹{OFFER.inrAmount.toLocaleString("en-IN")} → {OFFER.algoAmount} ALGO</span>
+        </div>
+        <div className="receipt-row">
+          <span className="label">Time</span>
+          <span className="value">{at.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}</span>
+        </div>
+        {result.refId && (
+          <div className="receipt-row">
+            <span className="label">Ref</span>
+            <span className="value">
+              <span title={result.refId}>{truncate(result.refId, 6, 4)}</span>
+              <CopyButton value={result.refId} />
+            </span>
+          </div>
+        )}
+        {result.txId && (
+          <div className="receipt-row">
+            <span className="label">Tx</span>
+            <span className="value">
+              <span title={result.txId}>{truncate(result.txId, 6, 4)}</span>
+              <CopyButton value={result.txId} />
+            </span>
+          </div>
+        )}
+        <div className="receipt-row">
+          <span className="label">Oracle</span>
+          <span className="value">
+            <span title={oracleAddr}>{truncate(oracleAddr, 5, 4)}</span>
+            <CopyButton value={oracleAddr} />
+          </span>
+        </div>
+      </div>
+      {result.txId && (
+        <a
+          href={`https://lora.algokit.io/testnet/transaction/${result.txId}`}
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-ghost"
+          style={{ width: "100%", marginTop: 18, height: 40, fontSize: 13 }}
+        >
+          View on Algorand
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path d="M2 10L10 2M5 2h5v5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -86,289 +205,86 @@ export default function DemoP2P() {
     setCompleted({ result: r, at: new Date() });
   };
 
-  const showError =
-    completed && !completed.result.success && completed.result.error && completed.result.error !== "cancelled";
-  const showSuccess = completed?.result.success;
+  const showError = completed && !completed.result.success && completed.result.error && completed.result.error !== "cancelled";
+  const showSuccess = !!completed?.result.success;
 
   return (
-    <main
-      className="shell"
-      style={{
-        paddingTop: "max(112px, 13vh)",
-        paddingBottom: 96,
-        position: "relative",
-        zIndex: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: 0,
-      }}
-    >
+    <section className="hero-section">
       <Petals />
+      <div className="shell hero-grid">
+        {/* LEFT: copy + offer card */}
+        <div className="hero-left">
+          <span className="pill" style={{ alignSelf: "flex-start" }}>
+            <span className="pill-dot" />
+            UwU SDK · Demo P2P
+          </span>
 
-      <span className="pill" style={{ alignSelf: "flex-start" }}>
-        <span className="pill-dot" />
-        UwU SDK · Demo P2P
-      </span>
+          <h1 className="h-display" style={{ marginTop: 24, textWrap: "balance" }}>
+            One offer. One button.{" "}
+            <em>Real proof on Algorand.</em>
+          </h1>
 
-      <h1
-        className="h-display"
-        style={{ marginTop: 28, maxWidth: 760, textWrap: "balance" }}
-      >
-        One offer. One button.{" "}
-        <em>Real proof on Algorand.</em>
-      </h1>
+          <p className="body-lg" style={{ marginTop: 18, color: "var(--fg-2)", maxWidth: 540 }}>
+            The minimum integration of <code>@uwu-protocol/checkout</code>. Click pay, complete
+            the Setu AA flow, get a signed on-chain receipt.
+          </p>
 
-      <p className="body-lg" style={{ marginTop: 22, maxWidth: 680 }}>
-        The minimum integration of <code>@uwu-protocol/checkout</code>. Pay{" "}
-        {OFFER.sellerName} ₹{OFFER.inrAmount} for {OFFER.algoAmount} ALGO — the SDK
-        runs the Setu Account Aggregator flow and anchors a proof on-chain.
-      </p>
+          <div className="offer-card">
+            <div className="offer-row">
+              <div>
+                <div className="eyebrow" style={{ marginBottom: 4 }}>Seller</div>
+                <div style={{ fontSize: 15.5, fontWeight: 500, letterSpacing: "-0.01em" }}>{OFFER.sellerName}</div>
+                <div className="mono" style={{ fontSize: 11.5, color: "var(--fg-3)", marginTop: 1 }}>{OFFER.sellerVpa}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div className="eyebrow" style={{ marginBottom: 4, justifyContent: "flex-end" }}>Offering</div>
+                <div style={{ fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em" }}>{OFFER.algoAmount} ALGO</div>
+                <div className="body-sm" style={{ marginTop: 1 }}>for ₹{OFFER.inrAmount.toLocaleString("en-IN")}</div>
+              </div>
+            </div>
 
-      <section className="how-it-works" style={{ marginTop: 56 }}>
-        <div className="eyebrow">How it works · 3 steps</div>
-        <ol>
-          <li>
-            <span className="step-num">01</span>
-            <div>
-              <h3>Pay seller via UPI</h3>
-              <p>
-                Standard <code>upi://pay</code> intent — money goes directly to the seller's bank account.
-                uWu never touches fiat, never holds funds, never asks for a payment licence.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span className="step-num">02</span>
-            <div>
-              <h3>Setu Account Aggregator verifies the credit</h3>
-              <p>
-                Buyer approves a one-time consent on Setu's RBI-licensed AA portal. The oracle reads
-                the buyer's bank statement and matches the credit by amount + UTR.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span className="step-num">03</span>
-            <div>
-              <h3>Oracle anchors proof on Algorand</h3>
-              <p>
-                An Ed25519-signed attestation is submitted to <code>UwUPaymentRegistry</code> (app{" "}
-                <code>762669103</code>) as a 40-byte box write. Any escrow contract can verify it and release funds.
-              </p>
-            </div>
-          </li>
-        </ol>
-      </section>
-
-      <section
-        className="card"
-        style={{ marginTop: 56, width: "100%", maxWidth: 560, padding: 28 }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            gap: 16,
-            marginBottom: 24,
-          }}
-        >
-          <div>
-            <div className="eyebrow" style={{ marginBottom: 6 }}>Seller</div>
-            <div style={{ fontSize: 17, fontWeight: 500, letterSpacing: "-0.01em" }}>
-              {OFFER.sellerName}
-            </div>
-            <div className="mono" style={{ fontSize: 12, color: "var(--fg-3)", marginTop: 2 }}>
-              {OFFER.sellerVpa}
-            </div>
+            <button onClick={onPay} className="btn btn-primary" style={{ width: "100%", marginTop: 18, height: 46, fontSize: 14 }}>
+              Pay ₹{OFFER.inrAmount.toLocaleString("en-IN")} &amp; Match
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <div className="eyebrow" style={{ marginBottom: 6, justifyContent: "flex-end" }}>Offering</div>
-            <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>
-              {OFFER.algoAmount} ALGO
+
+          {showError && (
+            <div className="error-strip">
+              <span className="mono" style={{ color: "#c44545", fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>Failed</span>
+              <span className="mono" style={{ fontSize: 12, color: "#a23", wordBreak: "break-word" }}>{completed?.result.error}</span>
             </div>
-            <div className="body-sm" style={{ marginTop: 2 }}>for ₹{OFFER.inrAmount.toLocaleString("en-IN")}</div>
-          </div>
+          )}
         </div>
 
-        <button
-          onClick={onPay}
-          className="btn btn-primary"
-          style={{ width: "100%", height: 48, fontSize: 14.5 }}
-        >
-          Pay ₹{OFFER.inrAmount.toLocaleString("en-IN")} &amp; Match
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </section>
-
-      {showSuccess && completed && (
-        <section
-          className="card"
-          style={{
-            marginTop: 22,
-            width: "100%",
-            maxWidth: 560,
-            padding: 26,
-            background: "rgba(95, 184, 154, 0.07)",
-            borderColor: "rgba(95, 184, 154, 0.35)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
-            <span
-              style={{
-                width: 26, height: 26, borderRadius: "50%",
-                background: "rgba(95, 184, 154, 0.18)",
-                border: "1.5px solid rgba(95, 184, 154, 0.5)",
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
-                <path d="M3 6.5l2.4 2.4L10 4.3" stroke="var(--green)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-            <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--fg)" }}>
-              Payment attested on Algorand
-            </div>
-          </div>
-
-          <div>
-            <div className="receipt-row">
-              <span className="label">Amount</span>
-              <span className="value">
-                ₹{OFFER.inrAmount.toLocaleString("en-IN")} → {OFFER.algoAmount} ALGO
-              </span>
-            </div>
-            <div className="receipt-row">
-              <span className="label">Timestamp</span>
-              <span className="value">
-                {completed.at.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
-              </span>
-            </div>
-            {completed.result.refId && (
-              <div className="receipt-row">
-                <span className="label">Ref ID</span>
-                <span className="value">
-                  <span title={completed.result.refId}>{truncate(completed.result.refId, 8, 6)}</span>
-                  <CopyButton value={completed.result.refId} />
-                </span>
-              </div>
-            )}
-            {completed.result.txId && (
-              <div className="receipt-row">
-                <span className="label">Tx ID</span>
-                <span className="value">
-                  <span title={completed.result.txId}>{truncate(completed.result.txId, 8, 6)}</span>
-                  <CopyButton value={completed.result.txId} />
-                </span>
-              </div>
-            )}
-            <div className="receipt-row">
-              <span className="label">Registry</span>
-              <span className="value">
-                <a
-                  href={`https://lora.algokit.io/testnet/application/${CONFIG.registryAppId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ color: "var(--fg)", textDecoration: "underline" }}
-                >
-                  app {CONFIG.registryAppId}
-                </a>
-              </span>
-            </div>
-            <div className="receipt-row">
-              <span className="label">Oracle</span>
-              <span className="value">
-                <span title={oracleAddr}>{truncate(oracleAddr, 6, 4)}</span>
-                <CopyButton value={oracleAddr} />
-              </span>
-            </div>
-          </div>
-
-          {completed.result.txId && (
-            <a
-              href={`https://lora.algokit.io/testnet/transaction/${completed.result.txId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-ghost"
-              style={{ width: "100%", marginTop: 22, height: 44, fontSize: 13.5 }}
-            >
-              View transaction on Algorand
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-                <path d="M2 10L10 2M5 2h5v5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </a>
+        {/* RIGHT: flow viz OR receipt */}
+        <div className="hero-right">
+          {showSuccess && completed ? (
+            <ReceiptCard completed={completed} oracleAddr={oracleAddr} />
+          ) : (
+            <FlowDiagram />
           )}
-        </section>
-      )}
+        </div>
+      </div>
 
-      {showError && (
-        <section
-          className="card"
-          style={{
-            marginTop: 22,
-            width: "100%",
-            maxWidth: 560,
-            padding: 22,
-            background: "rgba(239, 68, 68, 0.08)",
-            borderColor: "rgba(239, 68, 68, 0.30)",
-          }}
-        >
-          <div className="eyebrow" style={{ color: "#c44545", marginBottom: 8 }}>Attestation failed</div>
-          {completed?.result.refId && (
-            <div className="mono" style={{ fontSize: 11.5, color: "var(--fg-3)", marginBottom: 6, wordBreak: "break-all" }}>
-              ref: {completed.result.refId}
-            </div>
-          )}
-          <div className="mono" style={{ fontSize: 12.5, color: "#a23", wordBreak: "break-word" }}>
-            {completed?.result.error}
-          </div>
-        </section>
-      )}
-
-      <footer
-        style={{
-          marginTop: 96,
-          paddingTop: 24,
-          width: "100%",
-          borderTop: "1px solid var(--hair)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: 16,
-        }}
-      >
+      {/* Floor strip — minimal */}
+      <div className="hero-floor shell">
         <span className="body-sm">
           Powered by{" "}
-          <a
-            href="https://github.com/jaibhedia/uwu-algo-sdk"
-            style={{ color: "var(--fg-2)", textDecoration: "underline" }}
-          >
+          <a href="https://github.com/jaibhedia/uwu-algo-sdk" style={{ color: "var(--fg-2)", textDecoration: "underline" }}>
             @uwu-protocol/checkout
           </a>
         </span>
         {CONFIG.mockMode && (
-          <span
-            className="mono"
-            style={{
-              fontSize: 10.5,
-              letterSpacing: "0.1em",
-              color: "#f59e0b",
-              padding: "3px 8px",
-              border: "1px solid rgba(245, 158, 11, 0.35)",
-              borderRadius: 4,
-              textTransform: "uppercase",
-            }}
-          >
+          <span className="mono" style={{ fontSize: 10, letterSpacing: "0.1em", color: "#f59e0b", padding: "2px 7px", border: "1px solid rgba(245,158,11,0.35)", borderRadius: 4, textTransform: "uppercase" }}>
             mock mode
           </span>
         )}
-      </footer>
+      </div>
 
       {modal}
-    </main>
+    </section>
   );
 }
