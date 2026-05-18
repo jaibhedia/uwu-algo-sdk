@@ -180,6 +180,102 @@ code { font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
 .body-sm { font-size: 13px; line-height: 1.55; color: var(--fg-3); margin: 0; }
 .mono { font-family: var(--font-mono); }
 
+/* ── How it works ──────────────────────────────────────────────────────── */
+.how-it-works { width: 100%; max-width: 760px; }
+.how-it-works ol {
+  list-style: none; padding: 0; margin: 16px 0 0;
+  border-top: 1px solid var(--hair);
+}
+.how-it-works li {
+  display: flex; gap: 18px; align-items: flex-start;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--hair);
+}
+.how-it-works li:last-child { border-bottom: none; }
+.step-num {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  border: 1px solid var(--hair-2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 12px; font-weight: 500;
+  color: var(--fg-2);
+  letter-spacing: 0.02em;
+}
+.how-it-works h3 {
+  margin: 2px 0 6px;
+  font-size: 15.5px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+}
+.how-it-works li p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--fg-2);
+}
+.how-it-works code {
+  font-size: 0.86em;
+  padding: 1px 5px;
+}
+
+/* ── Receipt rows ──────────────────────────────────────────────────────── */
+.receipt-row {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--hair);
+  min-height: 36px;
+}
+.receipt-row:last-child { border-bottom: none; padding-bottom: 0; }
+.receipt-row .label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  flex-shrink: 0;
+}
+.receipt-row .value {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--fg);
+  text-align: right;
+  word-break: break-all;
+  display: inline-flex; align-items: center; gap: 6px;
+  min-width: 0;
+}
+.receipt-row .value > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+.copy-btn {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--hair);
+  color: var(--fg-3);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.copy-btn:hover {
+  background: var(--bg-3);
+  color: var(--fg);
+  border-color: var(--hair-2);
+}
+.copy-btn.copied {
+  background: rgba(95, 184, 154, 0.12);
+  color: var(--green);
+  border-color: rgba(95, 184, 154, 0.4);
+}
+
 /* ── Footer statement ──────────────────────────────────────────────────── */
 .footer-statement {
   font-family: var(--font-display), var(--font-sans);
