@@ -46,10 +46,10 @@ export default function DemoP2P() {
   const showError = result && !result.success && result.error && result.error !== "cancelled";
 
   return (
-    <main className="shell" style={{ paddingTop: "max(112px, 13vh)", paddingBottom: 96, position: "relative", zIndex: 1 }}>
+    <main className="shell" style={{ paddingTop: "max(112px, 13vh)", paddingBottom: 96, position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
       <Petals />
 
-      <span className="pill" style={{ alignSelf: "flex-start" }}>
+      <span className="pill">
         <span className="pill-dot" />
         UwU SDK · Demo P2P
       </span>
@@ -65,7 +65,7 @@ export default function DemoP2P() {
         runs the Setu Account Aggregator flow and anchors a proof on-chain.
       </p>
 
-      <section className="card" style={{ marginTop: 44, maxWidth: 560, padding: 28 }}>
+      <section className="card" style={{ marginTop: 44, width: "100%", maxWidth: 560, padding: 28, textAlign: "left" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 24 }}>
           <div>
             <div className="eyebrow" style={{ marginBottom: 6 }}>Seller</div>
@@ -102,10 +102,12 @@ export default function DemoP2P() {
           className="card"
           style={{
             marginTop: 22,
+            width: "100%",
             maxWidth: 560,
             padding: 22,
             background: "rgba(95, 184, 154, 0.10)",
             borderColor: "rgba(95, 184, 154, 0.35)",
+            textAlign: "left",
           }}
         >
           <div className="eyebrow" style={{ color: "var(--green)", marginBottom: 8 }}>
@@ -139,10 +141,12 @@ export default function DemoP2P() {
           className="card"
           style={{
             marginTop: 22,
+            width: "100%",
             maxWidth: 560,
             padding: 22,
             background: "rgba(239, 68, 68, 0.08)",
             borderColor: "rgba(239, 68, 68, 0.30)",
+            textAlign: "left",
           }}
         >
           <div className="eyebrow" style={{ color: "#c44545", marginBottom: 8 }}>Attestation failed</div>
@@ -157,7 +161,7 @@ export default function DemoP2P() {
         </section>
       )}
 
-      <footer style={{ marginTop: 96, paddingTop: 24, borderTop: "1px solid var(--hair)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+      <footer style={{ marginTop: 96, paddingTop: 24, width: "100%", borderTop: "1px solid var(--hair)", display: "flex", justifyContent: "center", alignItems: "center", flexWrap: "wrap", gap: 16, textAlign: "center" }}>
         <span className="body-sm">
           Powered by{" "}
           <a href="https://github.com/jaibhedia/uwu-algo-sdk" style={{ color: "var(--fg-2)", textDecoration: "underline" }}>
