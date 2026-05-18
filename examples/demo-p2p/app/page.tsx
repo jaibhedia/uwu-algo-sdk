@@ -1,6 +1,7 @@
 "use client";
 import { useUwUCheckout } from "@uwu-protocol/checkout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Petals } from "../components/Petals";
 
 const OFFER = {
   sellerVpa: "demo@bank",
@@ -22,9 +23,15 @@ const CONFIG = {
 
 const DEMO_BUYER_WALLET = "DEMOBUYER000000000000000000000000000000000000000000000000";
 
+type CheckoutResult = { success: boolean; txId?: string; refId?: string; error?: string };
+
 export default function DemoP2P() {
   const { openCheckout, modal } = useUwUCheckout(CONFIG);
-  const [result, setResult] = useState<{ success: boolean; txId?: string; refId?: string; error?: string } | null>(null);
+  const [result, setResult] = useState<CheckoutResult | null>(null);
+
+  useEffect(() => {
+    fetch(`${CONFIG.oracleApiUrl}/api/health`, { cache: "no-store" }).catch(() => {});
+  }, []);
 
   const onPay = async () => {
     setResult(null);
@@ -36,73 +43,80 @@ export default function DemoP2P() {
     setResult(r);
   };
 
-  return (
-    <main style={{ maxWidth: 560, margin: "0 auto", padding: "80px 24px" }}>
-      <header style={{ marginBottom: 40 }}>
-        <div style={{ fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: "#a86c52", fontWeight: 600, marginBottom: 8 }}>
-          uWu SDK Demo · P2P
-        </div>
-        <h1 style={{ fontSize: 32, fontWeight: 700, margin: 0, letterSpacing: "-0.02em" }}>
-          One offer. One button. <br />
-          Real proof on Algorand.
-        </h1>
-        <p style={{ color: "#666", marginTop: 16, lineHeight: 1.5 }}>
-          This is the minimum integration of <code style={{ background: "#fff", padding: "2px 6px", borderRadius: 4 }}>@uwu-protocol/checkout</code>.
-          Pay {OFFER.sellerName} ₹{OFFER.inrAmount} for {OFFER.algoAmount} ALGO. The SDK runs the Setu flow and anchors a proof on-chain.
-        </p>
-      </header>
+  const showError = result && !result.success && result.error && result.error !== "cancelled";
 
-      <div style={{
-        background: "#fff",
-        border: "1px solid rgba(0,0,0,0.08)",
-        borderRadius: 16,
-        padding: 24,
-        boxShadow: "0 12px 40px rgba(220,100,120,0.08)",
-      }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+  return (
+    <main className="shell" style={{ paddingTop: "max(112px, 13vh)", paddingBottom: 96, position: "relative", zIndex: 1 }}>
+      <Petals />
+
+      <span className="pill" style={{ alignSelf: "flex-start" }}>
+        <span className="pill-dot" />
+        UwU SDK · Demo P2P
+      </span>
+
+      <h1 className="h-display" style={{ marginTop: 28, maxWidth: 900 }}>
+        One offer. One button.{" "}
+        <em>Real proof on Algorand.</em>
+      </h1>
+
+      <p className="body-lg" style={{ marginTop: 22, maxWidth: 600 }}>
+        The minimum integration of <code>@uwu-protocol/checkout</code>. Pay{" "}
+        {OFFER.sellerName} ₹{OFFER.inrAmount} for {OFFER.algoAmount} ALGO — the SDK
+        runs the Setu Account Aggregator flow and anchors a proof on-chain.
+      </p>
+
+      <section className="card" style={{ marginTop: 44, maxWidth: 560, padding: 28 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 24 }}>
           <div>
-            <div style={{ fontSize: 11, color: "#999", textTransform: "uppercase", letterSpacing: "0.1em" }}>Seller</div>
-            <div style={{ fontSize: 16, fontWeight: 600 }}>{OFFER.sellerName}</div>
-            <div style={{ fontSize: 12, color: "#999", fontFamily: "monospace" }}>{OFFER.sellerVpa}</div>
+            <div className="eyebrow" style={{ marginBottom: 6 }}>Seller</div>
+            <div style={{ fontSize: 17, fontWeight: 500, letterSpacing: "-0.01em" }}>
+              {OFFER.sellerName}
+            </div>
+            <div className="mono" style={{ fontSize: 12, color: "var(--fg-3)", marginTop: 2 }}>
+              {OFFER.sellerVpa}
+            </div>
           </div>
           <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: 11, color: "#999", textTransform: "uppercase", letterSpacing: "0.1em" }}>Offering</div>
-            <div style={{ fontSize: 22, fontWeight: 700 }}>{OFFER.algoAmount} ALGO</div>
-            <div style={{ fontSize: 13, color: "#666" }}>for ₹{OFFER.inrAmount}</div>
+            <div className="eyebrow" style={{ marginBottom: 6, justifyContent: "flex-end" }}>Offering</div>
+            <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>
+              {OFFER.algoAmount} ALGO
+            </div>
+            <div className="body-sm" style={{ marginTop: 2 }}>for ₹{OFFER.inrAmount}</div>
           </div>
         </div>
 
         <button
           onClick={onPay}
+          className="btn btn-primary"
+          style={{ width: "100%", height: 48, fontSize: 14.5 }}
+        >
+          Pay ₹{OFFER.inrAmount} &amp; Match
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </section>
+
+      {result?.success && (
+        <section
+          className="card"
           style={{
-            width: "100%",
-            height: 52,
-            background: "#1a1a1a",
-            color: "#fff",
-            border: "none",
-            borderRadius: 12,
-            fontSize: 15,
-            fontWeight: 600,
-            cursor: "pointer",
+            marginTop: 22,
+            maxWidth: 560,
+            padding: 22,
+            background: "rgba(95, 184, 154, 0.10)",
+            borderColor: "rgba(95, 184, 154, 0.35)",
           }}
         >
-          Pay ₹{OFFER.inrAmount} &amp; Match →
-        </button>
-      </div>
-
-      {result && (
-        <div style={{
-          marginTop: 24,
-          padding: 20,
-          background: result.success ? "rgba(95,184,154,0.12)" : "rgba(239,68,68,0.10)",
-          border: `1px solid ${result.success ? "rgba(95,184,154,0.4)" : "rgba(239,68,68,0.3)"}`,
-          borderRadius: 12,
-        }}>
-          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
-            {result.success ? "✅ Payment attested" : "❌ Attestation failed"}
+          <div className="eyebrow" style={{ color: "var(--green)", marginBottom: 8 }}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden>
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="var(--green)" strokeOpacity="0.5" />
+              <path d="M4 6.5l1.8 1.8 3-3" stroke="var(--green)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Payment attested
           </div>
           {result.refId && (
-            <div style={{ fontSize: 12, fontFamily: "monospace", color: "#666", marginBottom: 4 }}>
+            <div className="mono" style={{ fontSize: 11.5, color: "var(--fg-3)", marginBottom: 6, wordBreak: "break-all" }}>
               ref: {result.refId}
             </div>
           )}
@@ -111,20 +125,50 @@ export default function DemoP2P() {
               href={`https://lora.algokit.io/testnet/transaction/${result.txId}`}
               target="_blank"
               rel="noreferrer"
-              style={{ fontSize: 13, color: "#0066cc", textDecoration: "underline", wordBreak: "break-all" }}
+              className="mono"
+              style={{ fontSize: 12.5, color: "var(--blue)", textDecoration: "underline", wordBreak: "break-all", display: "inline-block" }}
             >
-              View on Algorand → {result.txId}
+              View on Algorand →
             </a>
           )}
-          {result.error && (
-            <div style={{ fontSize: 12, fontFamily: "monospace", color: "#a23" }}>{result.error}</div>
-          )}
-        </div>
+        </section>
       )}
 
-      <footer style={{ marginTop: 60, fontSize: 12, color: "#999", textAlign: "center" }}>
-        Powered by <a href="https://github.com/jaibhedia/uwu-algo-sdk" style={{ color: "#666" }}>@uwu-protocol/checkout</a>
-        {CONFIG.mockMode && <span style={{ marginLeft: 12, color: "#f59e0b", fontFamily: "monospace" }}>MOCK MODE</span>}
+      {showError && (
+        <section
+          className="card"
+          style={{
+            marginTop: 22,
+            maxWidth: 560,
+            padding: 22,
+            background: "rgba(239, 68, 68, 0.08)",
+            borderColor: "rgba(239, 68, 68, 0.30)",
+          }}
+        >
+          <div className="eyebrow" style={{ color: "#c44545", marginBottom: 8 }}>Attestation failed</div>
+          {result?.refId && (
+            <div className="mono" style={{ fontSize: 11.5, color: "var(--fg-3)", marginBottom: 6, wordBreak: "break-all" }}>
+              ref: {result.refId}
+            </div>
+          )}
+          <div className="mono" style={{ fontSize: 12.5, color: "#a23", wordBreak: "break-word" }}>
+            {result?.error}
+          </div>
+        </section>
+      )}
+
+      <footer style={{ marginTop: 96, paddingTop: 24, borderTop: "1px solid var(--hair)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+        <span className="body-sm">
+          Powered by{" "}
+          <a href="https://github.com/jaibhedia/uwu-algo-sdk" style={{ color: "var(--fg-2)", textDecoration: "underline" }}>
+            @uwu-protocol/checkout
+          </a>
+        </span>
+        {CONFIG.mockMode && (
+          <span className="mono" style={{ fontSize: 10.5, letterSpacing: "0.1em", color: "#f59e0b", padding: "3px 8px", border: "1px solid rgba(245, 158, 11, 0.35)", borderRadius: 4, textTransform: "uppercase" }}>
+            mock mode
+          </span>
+        )}
       </footer>
 
       {modal}
