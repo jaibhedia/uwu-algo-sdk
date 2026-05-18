@@ -1,0 +1,51 @@
+{
+  "name": "@uwu-protocol/checkout",
+  "version": "0.1.0",
+  "description": "UwU Protocol — proof-of-payment checkout SDK for React. UPI payment via Setu AA → on-chain attestation on Algorand.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "src", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsup src/index.tsx --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.tsx --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "peerDependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "algosdk": "^3"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/qrcode": "^1.5.5",
+    "algosdk": "^3"
+  },
+  "keywords": ["uwu", "checkout", "proof-of-payment", "algorand", "upi", "setu", "account-aggregator", "fiat"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaibhedia/uwu-algo-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jaibhedia/uwu-algo-sdk/issues"
+  },
+  "homepage": "https://github.com/jaibhedia/uwu-algo-sdk#readme",
+  "publishConfig": {
+    "access": "public"
+  }
+}
