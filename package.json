@@ -1,6 +1,6 @@
 {
   "name": "@uwu-protocol/checkout",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "UwU Protocol — proof-of-payment checkout SDK for React. UPI payment via Setu AA → on-chain attestation on Algorand.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -12,7 +12,12 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist", "src", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsup src/index.tsx --format cjs,esm --dts --clean",
     "dev": "tsup src/index.tsx --format cjs,esm --dts --watch",
@@ -35,7 +40,16 @@
     "@types/qrcode": "^1.5.5",
     "algosdk": "^3"
   },
-  "keywords": ["uwu", "checkout", "proof-of-payment", "algorand", "upi", "setu", "account-aggregator", "fiat"],
+  "keywords": [
+    "uwu",
+    "checkout",
+    "proof-of-payment",
+    "algorand",
+    "upi",
+    "setu",
+    "account-aggregator",
+    "fiat"
+  ],
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
     "type": "git",
