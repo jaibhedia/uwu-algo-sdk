@@ -21,7 +21,11 @@
 
 A drop-in modal that turns a fiat UPI transfer into a cryptographically verifiable, on-chain proof in under 30 seconds. Think **Stripe Checkout**, but the receipt lives on a blockchain.
 
-## ✨ Features
+<p align="center">
+  <img src="./assets/demo.gif" alt="UwU Checkout demo — UPI payment to on-chain attestation" width="900" />
+</p>
+
+## Features
 
 - **One-hook integration** — `useUwUCheckout()` is all you need
 - **Full-stack verification** — Setu Account Aggregator confirms the real bank transaction
@@ -30,7 +34,7 @@ A drop-in modal that turns a fiat UPI transfer into a cryptographically verifiab
 - **Fully typed** — first-class TypeScript support with exported types
 - **Zero config UI** — styled modal with payment info, QR code, and status screens
 
-## 📦 Installation
+## Installation
 
 ```sh
 npm install @uwu-protocol/checkout
@@ -42,7 +46,7 @@ npm install @uwu-protocol/checkout
 npm install react@^18 react-dom@^18 algosdk@^3
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```tsx
 import { useUwUCheckout } from "@uwu-protocol/checkout";
@@ -83,7 +87,7 @@ export default function CheckoutButton() {
 > [!TIP]
 > `openCheckout` returns `Promise<CheckoutResult>`. On success, `txId` is the on-chain attestation transaction on Algorand testnet — viewable on [Lora Explorer](https://lora.algokit.io/testnet).
 
-## 🔄 How It Works
+## How It Works
 
 ```
 ┌──────────────┐     ┌──────────────────┐     ┌────────────────┐     ┌──────────────┐
@@ -100,7 +104,7 @@ export default function CheckoutButton() {
 | **3. FI fetch + attest** | Matched bank transaction is pulled and the on-chain attestation fires automatically |
 | **4. Success** | Promise resolves with `txId` + explorer link |
 
-## 📖 API Reference
+## API Reference
 
 ### `useUwUCheckout(config)`
 
@@ -147,7 +151,7 @@ interface CheckoutResult {
 }
 ```
 
-## ⚙️ Configuration Reference
+## Configuration Reference
 
 | Field | Required | Default | Description |
 |-------|:--------:|---------|-------------|
@@ -160,7 +164,7 @@ interface CheckoutResult {
 | `algodToken` | | `""` | Authentication token for your Algod node |
 | `algodPort` | | `""` | Port for your Algod node |
 
-## 🏗️ Prerequisites
+## Prerequisites
 
 You need a running **[uwu-algo-oraclesigner](https://github.com/jaibhedia/uwu-algo-oraclesigner)** instance. This backend service:
 
@@ -170,7 +174,7 @@ You need a running **[uwu-algo-oraclesigner](https://github.com/jaibhedia/uwu-al
 
 Point `oracleApiUrl` in your SDK config to the signer's URL.
 
-## 🧪 Demo
+## Demo
 
 A minimal P2P demo is included in [`examples/demo-p2p/`](./examples/demo-p2p):
 
@@ -182,6 +186,6 @@ npm install
 npm run dev
 ```
 
-## 📄 License
+## License
 
 **Source Available** — © 2026 UwU Protocol. You may use this software, but you may **not** modify, redistribute, or create derivative works. See [LICENSE](./LICENSE) for full terms.
