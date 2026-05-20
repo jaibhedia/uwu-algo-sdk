@@ -11,6 +11,7 @@
     <a href="https://www.npmjs.com/package/@uwu-protocol/checkout"><img src="https://img.shields.io/npm/dm/@uwu-protocol/checkout?style=flat-square&color=blue" alt="npm downloads" /></a>
     <a href="https://github.com/jaibhedia/uwu-algo-sdk/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Source%20Available-orange?style=flat-square" alt="license" /></a>
     <a href="https://github.com/jaibhedia/uwu-algo-sdk"><img src="https://img.shields.io/github/stars/jaibhedia/uwu-algo-sdk?style=flat-square" alt="GitHub stars" /></a>
+    <a href="https://demo.uwuprotocol.xyz"><img src="https://img.shields.io/badge/Live%20Demo-demo.uwuprotocol.xyz-7c3aed?style=flat-square" alt="Live Demo" /></a>
     <img src="https://img.shields.io/badge/TypeScript-Ready-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
     <img src="https://img.shields.io/badge/React-%3E%3D18-61dafb?style=flat-square&logo=react&logoColor=white" alt="React 18+" />
     <img src="https://img.shields.io/badge/Algorand-Testnet-000?style=flat-square&logo=algorand&logoColor=white" alt="Algorand" />
@@ -155,7 +156,7 @@ interface CheckoutResult {
 
 | Field | Required | Default | Description |
 |-------|:--------:|---------|-------------|
-| `oracleApiUrl` | ✅ | — | URL of your [uwu-algo-oraclesigner](https://github.com/jaibhedia/uwu-algo-oraclesigner) deployment |
+| `oracleApiUrl` | ✅ | — | URL of your `uwu-algo-oraclesigner` deployment |
 | `registryAppId` | ✅ | — | Algorand testnet app ID of `UwUPaymentRegistry` |
 | `merchantVpa` | ✅ | — | UPI VPA that receives the payment |
 | `merchantName` | ✅ | — | Human-readable name shown in the modal |
@@ -166,7 +167,7 @@ interface CheckoutResult {
 
 ## Prerequisites
 
-You need a running **[uwu-algo-oraclesigner](https://github.com/jaibhedia/uwu-algo-oraclesigner)** instance. This backend service:
+You need a running **`uwu-algo-oraclesigner`** instance. This backend service:
 
 - Holds your Setu Account Aggregator credentials
 - Signs on-chain attestations on behalf of the oracle
@@ -176,7 +177,9 @@ Point `oracleApiUrl` in your SDK config to the signer's URL.
 
 ## Demo
 
-A minimal P2P demo is included in [`examples/demo-p2p/`](./examples/demo-p2p):
+**Try it live → [demo.uwuprotocol.xyz](https://demo.uwuprotocol.xyz)**
+
+A minimal P2P demo is also included in [`examples/demo-p2p/`](./examples/demo-p2p):
 
 ```sh
 git clone https://github.com/jaibhedia/uwu-algo-sdk
